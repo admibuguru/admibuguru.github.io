@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Form Data Pegawai</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f1f1f1;
+      padding: 20px;
+    }
+
+    .container {
+      background: #fff;
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: auto;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    label {
+      font-weight: bold;
+      display: block;
+      margin-top: 15px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    input[type="file"] {
+      padding: 5px;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px;
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      width: 100%;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .note {
+      font-size: 0.9em;
+      color: #777;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Form Data Pegawai</h2>
+    <form>
+      <label for="nama">Nama Lengkap</label>
+      <input type="text" id="nama" name="nama" required>
+
+      <label for="ttl">Tempat Tanggal Lahir</label>
+      <input type="text" id="ttl" name="ttl" placeholder="Contoh: Jakarta, 01 Januari 1990" required>
+
+      <label for="alamat">Alamat Lengkap</label>
+      <textarea id="alamat" name="alamat" rows="3" required></textarea>
+
+      <label for="nohp">No HP</label>
+      <input type="tel" id="nohp" name="nohp" required>
+
+      <label for="email">Email</label>
+      <input type="email" id="email" name="email" required>
+
+      <label for="identitas">Identitas Diri (KTP/SIM/Passport)</label>
+      <select id="identitas" name="identitas" required>
+        <option value="">-- Pilih Identitas --</option>
+        <option value="KTP">KTP</option>
+        <option value="SIM">SIM</option>
+        <option value="Passport">Passport</option>
+      </select>
+
+      <label for="upload_identitas">Upload File Identitas (KTP/SIM/Passport)</label>
+      <input type="file" id="upload_identitas" name="upload_identitas" accept=".jpg,.jpeg,.png,.pdf" required>
+      <p class="note">Format yang diizinkan: JPG, PNG, atau PDF</p>
+
+      <label for="ortu">Nama Orang Tua/Wali</label>
+      <input type="text" id="ortu" name="ortu" required>
+
+      <label for="pengalaman">Pengalaman Kerja</label>
+      <textarea id="pengalaman" name="pengalaman" rows="4" placeholder="Tuliskan pengalaman kerja Anda..."></textarea>
+
+      <label for="ijazah">Upload Ijazah Terakhir</label>
+      <input type="file" id="ijazah" name="ijazah" accept=".jpg,.jpeg,.png,.pdf" required>
+
+      <label for="pasfoto">Upload Pas Foto 3x4</label>
+      <input type="file" id="pasfoto" name="pasfoto" accept=".jpg,.jpeg,.png" required>
+
+      <button type="submit">Kirim Data</button>
+    </form>
+  </div>
+</body>
+</html>
