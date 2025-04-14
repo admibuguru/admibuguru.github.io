@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>SAKHA GAME</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #1e1e2f;
+      color: white;
+      text-align: center;
+      padding: 30px;
+    }
+    .card {
+      background: #292942;
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 500px;
+      margin: auto;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+    input, button {
+      padding: 10px;
+      font-size: 16px;
+      margin: 10px;
+      border-radius: 8px;
+      border: none;
+    }
+    input {
+      width: 60%;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      cursor: pointer;
+    }
+    .result, .timer {
+      font-weight: bold;
+      margin-top: 20px;
+    }
+    .timer {
+      color: gold;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h1>SAKHA GAME</h1>
+    <p id="clue">Petunjuk akan muncul di sini</p>
+    <div class="timer" id="timer">Waktu: 20</div>
+    <input type="text" id="answerInput" placeholder="Tebakan kamu...">
+    <br>
+    <button onclick="checkAnswer()">Cek Jawaban</button>
+    <button onclick="nextQuestion()">Soal Berikutnya</button>
+    <p class="result" id="resultText"></p>
+  </div>
+
+  <script>
+    const questions = [
+      { clue: "1+1 =", answer: "2" },
+      { clue: "Pahlawan proklamator, presiden pertama Indonesia.", answer: "soekarno" },
+      { clue: "Pahlawan dari Sulawesi, terkenal dengan bambu runcing.", answer: "sam ratulangi" },
+      { clue: "Pahlawan nasional dari Jawa Barat, ahli strategi perang gerilya.", answer: "sudirman" },
+    ];
+
+    let current = 0;
+    let startTime, timerInterval, timeLeft = 20;
+    let answered = false;
+
+    function showQuestion() {
+      document.getElementById("clue").innerText = questions[current].clue;
+      document.getElementById("answerInput").value = "";
+      document.getElementById("resultText").innerText = "";
+      answered = false;
+
+      timeLeft = 20;
+      document.getElementById("timer").innerText = `Waktu: ${timeLeft}`;
+      startTime = Date.now();
+      clearInterval(timerInterval);
+      timerInterval = setInterval(updateTimer, 1000);
+    }
+
+    function updateTimer() {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      timeLeft = 20 - elapsed;
+      document.getElementById("timer").innerText = `Waktu: ${timeLeft}`;
+
+      if (timeLeft <= 0) {
+        clearInterval(timerInterval);
+        if (!answered) {
+          document.getElementById("resultText").innerText = "Waktu habis! 😢 Jawaban salah.";
+          document.getElementById("resultText").style.color = "orange";
+          answered = true;
+        }
+      }
+    }
+
+    function checkAnswer() {
+      if (answered) return;
+
+      answered = true;
+      clearInterval(timerInterval);
+      const userAnswer = document.getElementById("answerInput").value.toLowerCase().trim();
+      const correct = questions[current].answer;
+      const elapsed = (Date.now() - startTime) / 1000;
+
+      if (elapsed > 20) {
+        document.getElementById("resultText").innerText = "Terlambat! Waktu habis.";
+        document.getElementById("resultText").style.color = "red";
+        return;
+      }
+
+      if (userAnswer === correct) {
+        let rating = "";
+        if (elapsed < 10) rating = "🎯 Excellent!";
+        else if (elapsed < 13) rating = "👍 Good";
+        else if (elapsed < 15) rating = "🙂 Normal";
+        else rating = "😅 Not Good";
+
+        document.getElementById("resultText").innerText = `Benar! (${rating}) Waktu: ${elapsed.toFixed(1)} detik`;
+        document.getElementById("resultText").style.color = "lightgreen";
+      } else {
+        document.getElementById("resultText").innerText = `Salah. Jawaban yang benar: ${correct}`;
+        document.getElementById("resultText").style.color = "tomato";
+      }
+    }
+
+    function nextQuestion() {
+      current = (current + 1) % questions.length;
+      showQuestion();
+    }
+
+    window.onload = showQuestion;
+  </script>
+</body>
+</html>
