@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Formulir Karyawan</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+    form, .data-grid, .biodata-box {
+      margin-top: 20px;
+      border: 1px solid #ccc;
+      padding: 15px;
+      border-radius: 10px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+    .card {
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 8px;
+    }
+    img {
+      max-width: 100%;
+      height: 100px;
+      object-fit: cover;
+    }
+    .biodata {
+      margin-top: 10px;
+      padding: 10px;
+      background: #f0f0f0;
+    }
+  </style>
+</head>
+<body>
+
+<h2>Formulir Karyawan</h2>
+
+<form id="formKaryawan">
+  <label>Nama Lengkap:</label><br>
+  <input type="text" id="nama" required><br><br>
+
+  <label>ID Karyawan (Otomatis):</label><br>
+  <input type="text" id="id" readonly><br><br>
+
+  <label>Tempat Tanggal Lahir:</label><br>
+  <input type="text" id="ttl" placeholder="Contoh: Jakarta, 12 Mei 1990" required><br><br>
+
+  <label>NIK/SIM/PASPORT/Kartu Pelajar:</label><br>
+  <input type="text" id="identitas" required><br><br>
+
+  <label>No HP:</label><br>
+  <input type="text" id="hp" required><br><br>
+
+  <label>Email:</label><br>
+  <input type="email" id="email" required><br><br>
+
+  <label>Jabatan/Bidang:</label><br>
+  <input type="text" id="jabatan" required><br><br>
+
+  <label>Upload Foto Diri:</label><br>
+  <input type="file" id="foto" accept="image/*" required><br><br>
+
+  <button type="submit">Simpan Data</button>
+</form>
+
+<div class="data-grid">
+  <h3>Data Karyawan Tersimpan</h3>
+  <div id="gridData" class="grid"></div>
+</div>
+
+<div class="biodata-box">
+  <h3>Cari Biodata Karyawan</h3>
+  <input type="text" id="searchNama" placeholder="Masukkan nama lengkap">
+  <button onclick="cariBiodata()">Cari Biodata</button>
+  <div id="hasilBiodata" class="biodata"></div>
+</div>
+
+<script>
+  const form = document.getElementById('formKaryawan');
+  const gridData = document.getElementById('gridData');
+  const hasilBiodata = document.getElementById('hasilBiodata');
+  const dataKaryawan = [];
+
+  function generateId() {
+    return Math.floor(100000000 + Math.random() * 900000000);
+  }
+
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const reader = new FileReader();
+    const foto = document.getElementById('foto').files[0];
+
+    reader.onloadend = function() {
+      const karyawan = {
+        nama: document.getElementById('nama').value,
+        id: document.getElementById('id').value || generateId(),
+        ttl: document.getElementById('ttl').value,
+        identitas: document.getElementById('identitas').value,
+        hp: document.getElementById('hp').value,
+        email: document.getElementById('email').value,
+        jabatan: document.getElementById('jabatan').value,
+        foto: reader.result
+      };
+
+      dataKaryawan.push(karyawan);
+      tampilkanGrid();
+      form.reset();
+      document.getElementById('id').value = generateId(); // Generate ulang ID
+    };
+
+    if (foto) {
+      reader.readAsDataURL(foto);
+    }
+  });
+
+  function tampilkanGrid() {
+    gridData.innerHTML = "";
+    dataKaryawan.forEach(data => {
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.innerHTML = `
+        <strong>${data.nama}</strong><br>
+        ID: ${data.id}<br>
+        Jabatan: ${data.jabatan}<br>
+        <img src="${data.foto}" alt="Foto ${data.nama}">
+      `;
+      gridData.appendChild(card);
+    });
+  }
+
+  function cariBiodata() {
+    const namaCari = document.getElementById('searchNama').value.toLowerCase();
+    const hasil = dataKaryawan.find(k => k.nama.toLowerCase() === namaCari);
+
+    if (hasil) {
+      hasilBiodata.innerHTML = `
+        <h4>Biodata ${hasil.nama}</h4>
+        ID: ${hasil.id}<br>
+        TTL: ${hasil.ttl}<br>
+        Identitas: ${hasil.identitas}<br>
+        No HP: ${hasil.hp}<br>
+        Email: ${hasil.email}<br>
+        Jabatan: ${hasil.jabatan}<br>
+        <img src="${hasil.foto}" alt="Foto ${hasil.nama}">
+      `;
+    } else {
+      hasilBiodata.innerHTML = "<p style='color:red;'>Data tidak ditemukan.</p>";
+    }
+  }
+
+  // Generate ID pertama kali
+  document.getElementById('id').value = generateId();
+</script>
+
+</body>
+</html>
